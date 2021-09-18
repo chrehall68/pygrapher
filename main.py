@@ -70,9 +70,9 @@ def readInputText():
 
         # graph (v vs time)
         if choseDegree1:
+            # because velocity is the slope of the line
             y2 = [m for i in x]
             axis[0, 1].plot(x, y2)
-            # because velocity is the slope of the line
         else:
             # because ax^2 + bx + c has an instantaneous slope of
             # a*2x + b
