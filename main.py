@@ -9,7 +9,6 @@ def sequential_access(file: TextIOWrapper, *items):
     for requestedItem in items:
         if curLine[0 : len(requestedItem)] == requestedItem:
             vars.append(float(curLine.strip(requestedItem).strip()))
-            print("ppended")
         curLine = file.readline().strip("\n")
     return vars
 
@@ -38,8 +37,7 @@ def label_axes(xname, yname, axis: plt.Axes):
 
 def configureFigure(x, y, xlabel: str, ylabel: str, axis: plt.Axes):
     axis.set_xticks(range(round(min(x)), round(max(x)) + 1), minor=True)
-    axis.set_yticks(range(round(min(y)) - 1, round(max(y)) + 1), minor=True)
-    # print(help(axis.set_yticks))
+    axis.set_yticks(range(round(min(y)) - 1, round(max(y)) + 2), minor=True)
     label_axes(xlabel, ylabel, axis)
 
 
@@ -53,8 +51,6 @@ def readInputText():
         choseDegree1 = False
         x, y = getPositionTimeInfo(inputFile)
         axis[0, 0].scatter(x, y)
-        print("x is", x)
-        print("y is", y)
         configureFigure(x, y, "time", "position", axis[0, 0])
 
         # decide if is constant velocity or constant acceleration:
@@ -71,37 +67,23 @@ def readInputText():
             choseDegree1 = True
         else:
             axis[0, 0].plot(x, a * x * x + b * x + c)
-        print(choseDegree1)
 
         # graph (v vs time)
         if choseDegree1:
             y2 = [m for i in x]
             axis[0, 1].plot(x, y2)
             # because velocity is the slope of the line
-            configureFigure(x, y, "time", "velocity", axis[0, 1])
         else:
             # because ax^2 + bx + c has an instantaneous slope of
             # a*2x + b
             y2 = [a * 2 * i + b for i in x]
-            axis[0, 1].plot(x, y2)
-            configureFigure(
-                x,
-                [min(0, min(y2)), max(y2) + 1],
-                "time",
-                "velocity",
-                axis[0, 1],
-            )
+        axis[0, 1].plot(x, y2)
+        configureFigure(x, y2, "time", "velocity", axis[0, 1])
 
         # because a*2 is the slope for a*2x+b
         y3 = [a * 2 for i in x]
         axis[1, 0].plot(x, y3)
-        configureFigure(
-            x,
-            [min(0, min(y3)) - 1, max(y3) + 1],
-            "time",
-            "acceleration",
-            axis[1, 0],
-        )
+        configureFigure(x, y3, "time", "acceleration", axis[1, 0])
 
         print("FINAL RESULTS:")
         print("acceleration average is", a * 2, "which is about", round(a * 2))
