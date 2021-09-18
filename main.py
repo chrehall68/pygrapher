@@ -111,6 +111,8 @@ def readInputText():
                 vlist.append(v0 + a * curtime)
                 tlist.append(curtime)
                 if curtime != 0:
+                    # x = v_avg * t
+                    # in this case, t = 1s, so its just v_avg
                     pos += (vlist[curtime] + vlist[curtime - 1]) / 2
                 poslist.append(pos)
         else:
