@@ -105,33 +105,38 @@ def readInputText():
         tlist = []
         poslist = []
         alist = []
+        pos = start_x_pos
         if t != -1:
             for curtime in range(t + 1):
                 vlist.append(v0 + a * curtime)
                 tlist.append(curtime)
-                poslist.append(start_x_pos + vlist[curtime])
+                if curtime != 0:
+                    pos += (vlist[curtime] + vlist[curtime - 1]) / 2
+                poslist.append(pos)
         else:
-            pos = start_x_pos
-            tempv = curtime = 0
+            curtime = 0
             while pos >= 0:
                 tlist.append(curtime)
-                tempv = v0 + a * curtime
-                pos += tempv
-                curtime += 1
-                vlist.append(tempv)
+                vlist.append(v0 + a * curtime)
+                if curtime != 0:
+                    pos += (vlist[curtime] + vlist[curtime - 1]) / 2
                 poslist.append(pos)
+                curtime += 1
         alist = [a for time in tlist]
 
         # plot acceleration
+        axis[1, 0].plot(tlist, alist)
         configureFigure(tlist, alist, "time", "acceleration", axis[1, 0])
 
         # plot velocity
+        axis[0, 1].plot(tlist, vlist)
         configureFigure(tlist, vlist, "time", "position", axis[0, 1])
 
         # plot position
         axis[0, 0].scatter(tlist, poslist)  # points
-        configureFigure(tlist, vlist, "time", "position", axis[0, 0])  # line
+        axis[0, 0].plot(tlist, poslist)  # fitline
         axis[0, 0].plot(tlist, [0 for time in tlist], "red")  # line for 0
+        configureFigure(tlist, poslist, "time", "position", axis[0, 0])
 
     # finally, no matter which was input,
     # show graphs
