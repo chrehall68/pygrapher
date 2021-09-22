@@ -25,7 +25,7 @@ T 3 V0 22 VX 2
 import math as m
 
 
-class solver:
+class One_D_Solver:
     def __init__(self, inputFileLocat: str):
         inputFile = open(inputFileLocat)
         inputLst = ""
@@ -243,4 +243,4 @@ class solver:
         return retVal
 
 
-mySolver = solver("./input.txt")
+mySolver = One_D_Solver("./input.txt")
